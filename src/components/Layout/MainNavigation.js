@@ -1,8 +1,30 @@
 import { Link } from 'react-router-dom';
-
+import React,{useContext, useState,useEffect } from 'react';
 import classes from './MainNavigation.module.css';
+import AuthContext from '../../Store/auth-context';
 
 const MainNavigation = () => {
+
+const [isToken,setIsToken]=useState(false)
+  const authctx=useContext(AuthContext)
+  const deleteTokenHandler=()=>
+  {
+    authctx.removeToken()
+  }
+
+  useEffect(()=>
+  {
+    if(authctx.tokenId)
+    {
+      setIsToken(true)
+    }
+    else{
+      setIsToken(false)
+    }
+  },[authctx.tokenId])
+
+ 
+
   return (
     <header className={classes.header}>
       <Link to='/'>
@@ -11,13 +33,13 @@ const MainNavigation = () => {
       <nav>
         <ul>
           <li>
-            <Link to='/auth'>Login</Link>
+            {!isToken && <Link to='/auth'>Login</Link>}
           </li>
           <li>
-            <Link to='/profile'>Profile</Link>
+            {isToken && <Link to='/profile'>Profile</Link>}
           </li>
           <li>
-            <button>Logout</button>
+            { isToken && <button onClick={deleteTokenHandler} >Logout</button>}
           </li>
         </ul>
       </nav>
