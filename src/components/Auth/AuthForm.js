@@ -4,7 +4,7 @@ import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const[loader,setLoader]=useState(false)
+  const [loader, setLoader] = useState(false);
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
@@ -15,15 +15,40 @@ const AuthForm = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
 
-    setLoader(true)
+    setLoader(true);
 
     const enteredEmail = enteredEmailRef.current.value;
     const enteredPassword = enteredPasswordRef.current.value;
 
     if (isLogin) {
+      let res = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: enteredEmail,
+            password: enteredPassword,
+            returnSecureToken: true,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      try {
+        setLoader(false);
+        if (res.ok) {
+          let data = await res.json();
+          console.log(data.idToken);
+        } else {
+          let data = await res.json();
+          throw Error(data.error.message);
+        }
+      } catch (err) {
+        alert(err);
+      }
     } else {
       let res = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",  // this key will be in project setting , web api key 
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY", // this key will be in project setting , web api key
         {
           method: "POST",
           body: JSON.stringify({
@@ -38,17 +63,17 @@ const AuthForm = () => {
       //this whole format of signup with email/password is clearly mentioned in Firebase Auth Rest Api site
 
       try {
-        setLoader(false)
+        setLoader(false);
         if (res.ok) {
           let data = await res.json();
           console.log(data);
         } else {
           let data = await res.json();
-          throw Error(data.error.message)
+          throw Error(data.error.message);
           // console.log(data.error.message);
         }
       } catch (err) {
-        alert(err)
+        alert(err);
         console.log(err);
       }
     }
@@ -72,9 +97,11 @@ const AuthForm = () => {
           />
         </div>
         <div className={classes.actions}>
-          {!loader && <button onClick={submitHandler}>
-            {isLogin ? "Login" : "Create Account"}
-          </button>}
+          {!loader && (
+            <button onClick={submitHandler}>
+              {isLogin ? "Login" : "Create Account"}
+            </button>
+          )}
           {loader && <p>Sending Request...</p>}
           <button
             type="button"
