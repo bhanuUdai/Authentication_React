@@ -1,45 +1,27 @@
-import { Link } from 'react-router-dom';
-import React,{useContext, useState,useEffect } from 'react';
-import classes from './MainNavigation.module.css';
-import AuthContext from '../../Store/auth-context';
+import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import classes from "./MainNavigation.module.css";
+import AuthContext from "../../Store/auth-context";
 
 const MainNavigation = () => {
-
-const [isToken,setIsToken]=useState(false)
-  const authctx=useContext(AuthContext)
-  const deleteTokenHandler=()=>
-  {
-    authctx.removeToken()
-  }
-
-  useEffect(()=>
-  {
-    if(authctx.tokenId)
-    {
-      setIsToken(true)
-    }
-    else{
-      setIsToken(false)
-    }
-  },[authctx.tokenId])
-
- 
+  const authctx = useContext(AuthContext);
+  const deleteTokenHandler = () => {
+    authctx.removeToken();
+  };
 
   return (
     <header className={classes.header}>
-      <Link to='/'>
+      <Link to="/">
         <div className={classes.logo}>React Auth</div>
       </Link>
       <nav>
         <ul>
+          <li>{!authctx.validLogin && <Link to="/auth">Login</Link>}</li>
+          <li>{authctx.validLogin && <Link to="/profile">Profile</Link>}</li>
           <li>
-            {!isToken && <Link to='/auth'>Login</Link>}
-          </li>
-          <li>
-            {isToken && <Link to='/profile'>Profile</Link>}
-          </li>
-          <li>
-            { isToken && <button onClick={deleteTokenHandler} >Logout</button>}
+            {authctx.validLogin && (
+              <button onClick={deleteTokenHandler}>Logout</button>
+            )}
           </li>
         </ul>
       </nav>

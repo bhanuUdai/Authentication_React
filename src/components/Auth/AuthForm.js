@@ -1,11 +1,11 @@
 import { useState, useRef, useContext } from "react";
-
+import { useHistory } from "react-router-dom";
 import classes from "./AuthForm.module.css";
 import AuthContext from "../../Store/auth-context";
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loader, setLoader] = useState(false);
-
+  const history=useHistory()  // we push desired path in useHistory and it will redirect the user there
   const authctx=useContext(AuthContext)
 
   const switchAuthModeHandler = () => {
@@ -44,6 +44,7 @@ const AuthForm = () => {
         if (res.ok) {
           let data = await res.json();
           authctx.getToken(data.idToken)
+          history.push('/profile')
           console.log(data.idToken);
         } else {
           let data = await res.json();
