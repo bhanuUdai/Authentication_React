@@ -44,7 +44,7 @@ const AuthForm = () => {
         if (res.ok) {
           let data = await res.json();
           authctx.getToken(data.idToken)
-          history.push('/profile')
+          history.replace('/')
           console.log(data.idToken);
         } else {
           let data = await res.json();
