@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import AuthContext from "./auth-context";
 const ContextProvider = (prop) => {
-  const [token, setToken] = useState("");
+  const storedToken=localStorage.getItem('token')
+  const [token, setToken] = useState(storedToken);
   let setValidLogin=false;
   const getTokenHandler = (tkn) => {
     setToken(tkn);
+    localStorage.setItem('token', tkn)
     console.log("called");
   };
 
   const removeTokenHandler = () => {
     setToken("");
+    localStorage.removeItem('token')
   };
+
 
 
   if(token)

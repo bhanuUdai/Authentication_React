@@ -1,16 +1,16 @@
 import classes from './ProfileForm.module.css';
 import AuthContext from '../../Store/auth-context';
 import { useContext , useRef } from 'react';
-import {Redirect} from 'react-router-dom'
+// import {Redirect} from 'react-router-dom'
 const ProfileForm = () => {
 
   const authctx=useContext(AuthContext)
   const newPasswordRef=useRef()
 
-  if(authctx.validLogin===false)
-  {
-    return(<Redirect to='/auth' ></Redirect>)  // if user is notlogin means it has noToken and try to access profile page, will redirect to auth page
-  }
+  // if(authctx.validLogin===false)
+  // {
+  //   return(<Redirect to='/auth' ></Redirect>)  // if user is notlogin means it has noToken and try to access profile page, will redirect to auth page
+  // }
 
 
 const submitHandler=async(event)=>
